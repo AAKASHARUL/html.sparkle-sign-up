@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Black and Green Sign-up Page</title>
+    <style>
+        :root {
+            --primary-color: #00ff00;
+            --secondary-color: #003300;
+            --background-color: #000000;
+            --text-color: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            background-color: rgba(0, 51, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,255,0,0.25), 0 10px 10px rgba(0,255,0,0.22);
+            overflow: hidden;
+            width: 768px;
+            max-width: 100%;
+            min-height: 480px;
+        }
+
+        .form-container {
+            padding: 40px;
+            flex: 1;
+        }
+
+        .sign-up-container {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .welcome-container {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        input {
+            background-color: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--text-color);
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            transform: scale(1.05);
+            box-shadow: 0 0 8px var(--primary-color);
+        }
+
+        button {
+            border-radius: 20px;
+            border: 1px solid var(--primary-color);
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .social-container {
+            margin: 20px 0;
+        }
+
+        .social-container a {
+            border: 1px solid var(--primary-color);
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            height: 40px;
+            width: 40px;
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .social-container a:hover {
+            transform: rotate(360deg);
+            background-color: var(--primary-color);
+            color: var(--background-color);
+        }
+
+        .password-strength {
+            margin-top: 10px;
+            height: 5px;
+            background-color: #ddd;
+            border-radius: 3px;
+        }
+
+        .password-strength-meter {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .terms {
+            margin-top: 15px;
+            font-size: 0.8em;
+        }
+
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-bg"></canvas>
+    <div class="container">
+        <div class="form-container sign-up-container">
+            <form action="#" id="signupForm">
+                <h1>Create Account</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your email for registration</span>
+                <input type="text" placeholder="Name" required />
+                <input type="email" placeholder="Email" required />
+                <input type="password" id="password" placeholder="Password" required />
+                <div class="password-strength">
+                    <div class="password-strength-meter"></div>
+                </div>
+                <div class="terms">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">I agree to the Terms of Service and Privacy Policy</label>
+                </div>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container welcome-container">
+            <h1>Welcome, Hacker!</h1>
+            <p>Enter your details and join our elite network</p>
+            <button id="signInBtn">Sign In</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const welcomeText = document.querySelector('.welcome-container h1');
+            const text = welcomeText.textContent;
+            welcomeText.textContent = '';
+            
+            function typeWriter(text, i) {
+                if (i < text.length) {
+                    welcomeText.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(() => typeWriter(text, i), 100);
+                }
+            }
+            
+            typeWriter(text, 0);
+
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    let ripple = document.createElement('span');
+                    this.appendChild(ripple);
+                    let x = e.clientX - e.target.offsetLeft;
+                    let y = e.clientY - e.target.offsetTop;
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 300);
+                });
+            });
+
+            document.getElementById('signInBtn').addEventListener('click', function() {
+                alert('This would redirect to the Sign In page');
+            });
+
+            const passwordInput = document.getElementById('password');
+            const strengthMeter = document.querySelector('.password-strength-meter');
+
+            passwordInput.addEventListener('input', function() {
+                const strength = calculatePasswordStrength(this.value);
+                strengthMeter.style.width = `${strength}%`;
+                strengthMeter.style.backgroundColor = getColor(strength);
+            });
+
+            function calculatePasswordStrength(password) {
+                let strength = 0;
+                if (password.length > 6) strength += 20;
+                if (password.length > 10) strength += 20;
+                if (/[A-Z]/.test(password)) strength += 20;
+                if (/[0-9]/.test(password)) strength += 20;
+                if (/[^A-Za-z0-9]/.test(password)) strength += 20;
+                return strength;
+            }
+
+            function getColor(strength) {
+                if (strength < 40) return '#ff4d4d';
+                if (strength < 70) return '#ffd633';
+                return '#00ff00';
+            }
+
+            // Matrix background effect
+            const canvas = document.getElementById('matrix-bg');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const nums = '0123456789';
+
+            const alphabet = katakana + latin + nums;
+
+            const fontSize = 16;
+            const columns = canvas.width/fontSize;
+
+            const rainDrops = [];
+
+            for( let x = 0; x < columns; x++ ) {
+                rainDrops[x] = 1;
+            }
+
+            const draw = () => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
+
+                for(let i = 0; i < rainDrops.length; i++)
+                {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillText(text, i*fontSize, rainDrops[i]*fontSize);
+
+                    if(rainDrops[i]*fontSize > canvas.height && Math.random() > 0.975){
+                        rainDrops[i] = 0;
+                    }
+                    rainDrops[i]++;
+                }
+            };
+
+            setInterval(draw, 30);
+
+            document.getElementById('signupForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Sign up successful! Welcome to our network!');
+            });
+        });
+    </script>
+</body>
+</html>
